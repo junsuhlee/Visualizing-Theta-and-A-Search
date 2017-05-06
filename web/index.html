@@ -1,0 +1,118 @@
+<!doctype html>
+<html ng-app="anyAngle">
+  <head>
+  <title>Search Algorithm</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="js/index.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+
+  <!-- Angular Material Library -->
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/index.css">
+  </head>
+  <body ng-controller="mainController">
+    <p class="mainTitle">USC Web Algorithm Visualization</p>
+    <div style="width: 1000px; margin:auto">
+    
+    <div style="width: 450px; display:inline-block; vertical-align: top;">
+     <h3>Mode</h3>
+      <md-radio-group ng-model="simulationMode">
+        <md-radio-button ng-click="modeChanged('immediate')" style="display:inline-block;" value="immediate" class="md-primary">Immediate</md-radio-button>
+        <md-radio-button ng-click="modeChanged('simulation')" style="display:inline-block;" value="simulation">Simulation</md-radio-button>
+     
+      </md-radio-group>
+       <h3>Simulation Speed</h3>
+        <md-slider flex min="0" max="500" ng-model="simulationSpeed" aria-label="red" id="speed-slider" class></md-slider>
+        <label>{{250 / (500-simulationSpeed) | number:2 }}X</label>
+    </div>
+   
+    <div style="width: 450px; display:inline-block; vertical-align: top;">
+       <h3>Search Algorithm</h3>
+      <md-radio-group ng-model="searchType">
+        <md-radio-button style="display:inline-block;" ng-click="searchTypeChanged('AStar')" value="AStar" class="md-primary">A*</md-radio-button>
+        <md-radio-button style="display:inline-block;" ng-click="searchTypeChanged('AStarWithSmoothing')" value="AStarWithSmoothing">A* with Post Smoothing</md-radio-button>
+        <md-radio-button style="display:inline-block;" ng-click="searchTypeChanged('ThetaStar')" value="ThetaStar">Theta*</md-radio-button>
+      </md-radio-group>
+    </div>
+    </div>
+    <hr>
+   
+    <div style="width: 1000px; margin:auto">
+    <div style="width: 450px; display:inline-block">
+       <h3>Start Point</h3>
+      <md-radio-group ng-model="cornerTypeStart">
+        <md-radio-button ng-click="cornerTypeChanged('start','northEast')" value="northEast" class="md-primary">North East</md-radio-button>
+        <md-radio-button ng-click="cornerTypeChanged('start','northWest')" value="northWest">North West</md-radio-button>
+        <md-radio-button ng-click="cornerTypeChanged('start','southEast')" value="southEast">South East</md-radio-button>
+        <md-radio-button ng-click="cornerTypeChanged('start','southWest')" value="southWest">South West</md-radio-button>
+      </md-radio-group>
+    </div>
+    <div style="width: 450px; display:inline-block">
+      <h3>Goal Point</h3>
+      <md-radio-group ng-model="cornerTypeGoal">
+        <md-radio-button ng-click="cornerTypeChanged('goal','northEast')" value="northEast" class="md-primary">North East</md-radio-button>
+        <md-radio-button ng-click="cornerTypeChanged('goal','northWest')" value="northWest">North West</md-radio-button>
+        <md-radio-button ng-click="cornerTypeChanged('goal','southEast')" value="southEast">South East</md-radio-button>
+        <md-radio-button ng-click="cornerTypeChanged('goal','southWest')" value="southWest">South West</md-radio-button>
+      </md-radio-group>
+    </div>
+    </div>
+    <div class="message" ng-show="notifyingSettingStartingPoint && !notifyingSettingGoalPoint">Set Start Point!</div>
+    <div class="message messageGoal" ng-show="notifyingSettingGoalPoint">Set Goal Point!</div>
+    <div style="position: absolute; left:0px; right:0px; width:500px; height:500px; margin-left: auto; margin-right: auto; background:white; font-weight: 600;z-index:10000; top:0px; font-size: 50px; text-align: center; line-height: 500px;" ng-show="zoomGrid">
+    Set Start Point</div>
+    <div class="gridContainer">
+         <canvas height="600" width="900" id="mainCanvas" class="mainCanvas"></canvas>
+         <canvas height="600" width="900" id="mainCanvas2" class="mainCanvas"></canvas>
+         <canvas height="600" width="900" id="mainCanvas3" class="mainCanvas"></canvas>
+        <div class="row" ng-repeat="y in getNumber(size.row) track by $index">
+            <div class="grid" ng-class="{'clicked' : cell[$parent.$index][$index].isObstacle}" ng-repeat="x in getNumber(size.column) track by $index">
+            <div class="gridDummy"></div>
+            <div class="gridElement"></div>
+            <a row="{{$parent.$index}}" column="{{$index}}" class="gridClickable" oncontextmenu="return false;" ng-right-click href="" ng-click="gridClicked($parent.$index, $index)">
+            </a>
+            </div>
+        </div>
+    </div>
+    <div class="console">
+          <md-button ng-click="mapSelected('mapComplex')">
+                Cretan Labyrinth
+          </md-button>
+          <md-button ng-click="mapSelected('mapSal')">
+                SAL
+          </md-button>
+          <md-button ng-click="mapSelected('mapEqaud')">
+                E-Quad
+          </md-button>
+          <md-button ng-click="mapSelected('mapManhattan')">
+                Manhattan
+          </md-button>
+           <md-button ng-click="mapSelected('mapSkyline')">
+                Skyline
+          </md-button>
+    </div>
+    <div style="margin-bottom: 150px;">
+      <p>Professor Sven Koenig</p>
+      <p>Tansel Uras</p>
+      <p>Jun Suh Lee (Undergraduate Student)</p>
+      <p>Jonathan Grant (Undergraduate Student)</p>
+      <p>Duncan (Undergraduate Student)</p>
+
+    </div>
+    <div class="bottomNav">
+      <div class="resetButton">
+        <a href="" class="gridClickable" ng-click="reset()"></a>
+        Reset
+      </div>
+      <div class="expansionHolder">
+        Num of Expansion: {{expansion}} Length: {{totalLength | number:2}}
+      </div>
+    <div>
+  </body>
+</html>
+

@@ -1,0 +1,169 @@
+*{
+    font-family: 'Roboto', sans-serif;
+}
+html{
+    background: #F0F0F0 !important;
+
+}
+body{
+    background: #F0F0F0 !important;
+    text-align: center;
+    
+}
+.mainTitle{
+    width:100%;
+    color:gray;
+}
+
+#searchButton{
+
+    position: absolute;
+    right:10px;
+    top:3px;
+}
+
+
+
+.buttonBar{
+    position: fixed;
+    height:30px;
+    width:100%;
+    top:0px;
+    left:0;
+    right:0;
+    background-color: #0CAC73;
+}
+.button{
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    display: block;
+    font-size: 16px;
+    cursor: pointer;
+}
+.gridContainer{
+        margin:auto;
+    margin-top: 20px;
+    width:900px;
+    height:600px;
+    position: relative;
+}
+.row{
+    width:100%;
+    display: table;
+}
+.clicked{
+  /*  background-color: black !Important;*/
+   background-color: #ddd !Important;
+   background-repeat: no-repeat !Important;
+  background-size: 100% !Important;
+}
+.startGrid{
+    background: green !important;
+}
+.goalGrid{
+    background: red !important;
+}
+.grid{
+   /*box-shadow: 0 3px 1px -2px rgba(0,0,0,.94),0 2px 2px 0 rgba(0,0,0,0.5),0 1px 5px 0 rgba(0,0,0,0.5);
+*/
+    width:30px;
+    height:30px;
+    background-color: white;
+    position: relative;
+    vertical-align: top;
+    display: inline-block;
+
+
+}
+.gridElement{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.bottomNav{
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    height: 74px;
+    background: #E3E3E3;
+    z-index: 15000;
+}
+.message{
+    position: fixed; 
+    left:0px; 
+    width:100%; 
+    font-weight: 700;
+    z-index:10000; 
+    top: 30vh; 
+    font-size: 80px; 
+    text-shadow: 2px 2px 2px rgba(150, 150, 150, 1);
+    color: #47C57F; 
+    text-align: center;
+}
+.messageGoal{
+    color: #FF6B6B;
+}
+.resetButton{
+    color: #fff;
+    background-color: #FF6B6B;
+    position: absolute;
+    top:0px;
+    left: 0px;
+    width: 74px;
+    height: 74px;
+    line-height: 74px;
+}
+.startButton{
+    color: #fff;
+    background-color: #47C57F;
+    position: absolute;
+    top:0px;
+    right: 0px;
+    width: 74px;
+    height: 74px;
+    line-height: 74px;
+}
+.expansionHolder{
+    width: 100%;
+    line-height: 74px;
+    font-size: 35px;
+    text-align: center;
+}
+.gridDummy{
+    padding-top: 100%;
+}
+.gridClickable{
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    vertical-align: top;
+    bottom:0;
+    z-index: 1000;
+}
+
+
+
+
+/*canvas*/
+.mainCanvas{
+    position: absolute;
+/*    width: 900px;
+    height: 580px;*/
+    z-index: 100;
+    top:0px;
+    left:0px;
+}
+
+
+.console{
+    width:50%;
+    margin: auto;
+    padding:50px;
+    text-align: center;
+}
